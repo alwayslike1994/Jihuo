@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFFFFF</color>
+    <color name="grey">#EEEEEE</color>
+    <color name="red">#FF0000</color>
+    <color name="orange">#FCBB2F</color>
+    <color name="vip_user_bg">#FFFFA0</color>
+    <color name="force_out_bg">#30A1CB</color>
+    <color name="normal_user_bg">#4040FF</color>
+    <color name="no_user_bg">#FFFFFF</color>
+    <color name="wait_to_check_user_bg">#FF4040</color>
+    <color name="bg_color">#EBEBEB</color>
+    <color name="dark_grey">#D9D9D9</color>
+    <color name="dark_blue">#2da8eb</color>
+    <color name="light_blue">#3584c4</color>
+    <color name="diver">#cccccc</color>
+    <color name="black">#000000</color>
+    <color name="grey_background">#37474F</color>
+    <color name="large_10_carports_color"> #e60000</color>
+    <color name="small_10_carports_color"> #ff6666</color>
+    <color name="all_caports_color">#0000cc</color>
+    <color name="checked_caports_color">#4d4dff</color>
+    <color name="empty_caports_color">#9900cc</color>
+    <color name="error_caports_color">#cc33ff</color>
+    <color name="carport_green">#00c644</color>
+    <color name="carport_orange">#ff7829</color>
+    <color name="dark_button_background">#0075fa</color>
+    <color name="light_button_background">#0099fa</color>
+    <color name="viewfinder_frame">#ff000000</color>
+    <color name="viewfinder_laser">#ffff0000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#b0000000</color>
+    <color name="possible_result_points">#00000000</color>
+</resources>
