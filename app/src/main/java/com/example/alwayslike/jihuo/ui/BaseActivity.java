@@ -86,6 +86,7 @@ public class BaseActivity extends AppCompatActivity implements Serializable {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
     }

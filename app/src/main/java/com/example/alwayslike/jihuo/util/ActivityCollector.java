@@ -1,19 +1,18 @@
 package com.example.alwayslike.jihuo.util;
 
 import android.app.Activity;
-import android.content.IntentFilter;
-
-import com.example.alwayslike.jihuo.Jihuo;
-//import com.example.alwayslike.jihuo.servers.NetworkChangeReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//import com.example.alwayslike.jihuo.servers.NetworkChangeReceiver;
 
 /**
  * Created by alwayslike on 2017/5/8.
  */
 
-public class ActivityCollector {private static List<Activity> activities = new ArrayList<Activity>();
+public class ActivityCollector {
+    private static List<Activity> activities = new ArrayList<Activity>();
 
 //    private static NetworkChangeReceiver mReceiver;
 

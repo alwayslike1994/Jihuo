@@ -19,8 +19,8 @@
     <color name="diver">#cccccc</color>
     <color name="black">#000000</color>
     <color name="grey_background">#37474F</color>
-    <color name="large_10_carports_color"> #e60000</color>
-    <color name="small_10_carports_color"> #ff6666</color>
+    <color name="large_10_carports_color">#e60000</color>
+    <color name="small_10_carports_color">#ff6666</color>
     <color name="all_caports_color">#0000cc</color>
     <color name="checked_caports_color">#4d4dff</color>
     <color name="empty_caports_color">#9900cc</color>

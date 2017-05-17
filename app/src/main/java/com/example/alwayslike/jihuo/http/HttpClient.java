@@ -2,7 +2,6 @@ package com.example.alwayslike.jihuo.http;
 
 import android.util.Log;
 
-
 import com.example.alwayslike.jihuo.Jihuo;
 import com.example.alwayslike.jihuo.util.Constant;
 import com.example.alwayslike.jihuo.util.LogUtil;
@@ -46,7 +45,7 @@ public class HttpClient {
                     BufferedReader reader = null;
                     PrintWriter writer = null;
                     try {
-                        url = new URL(Constant.Address.HTTP_ADDRESS );
+                        url = new URL(Constant.Address.HTTP_ADDRESS);
                         conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("POST");
                         conn.setRequestProperty("Connection", "close");
@@ -132,7 +131,6 @@ public class HttpClient {
         }
 
     }
-
 
 
 }

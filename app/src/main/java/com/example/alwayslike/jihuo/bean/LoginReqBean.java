@@ -6,7 +6,7 @@ package com.example.alwayslike.jihuo.bean;
 
 public class LoginReqBean {
     private String phonenumber;
-    private  String passwd;
+    private String passwd;
 
     public LoginReqBean(String phonenumber, String passwd) {
         this.phonenumber = phonenumber;

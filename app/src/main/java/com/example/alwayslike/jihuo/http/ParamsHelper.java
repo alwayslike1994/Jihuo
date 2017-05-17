@@ -1,8 +1,6 @@
 package com.example.alwayslike.jihuo.http;
 
 import com.example.alwayslike.jihuo.bean.LoginReqBean;
-
-
 import com.example.alwayslike.jihuo.bean.VST5ReqBean;
 import com.google.gson.Gson;
 
@@ -13,9 +11,9 @@ import com.google.gson.Gson;
 public class ParamsHelper {
     /**
      * 获取登录参数
-     * */
-    public   static String  getLoginParams(LoginReqBean loginReqBean){
-        StringBuilder result=new StringBuilder();
+     */
+    public static String getLoginParams(LoginReqBean loginReqBean) {
+        StringBuilder result = new StringBuilder();
 
         try {
 
@@ -24,25 +22,24 @@ public class ParamsHelper {
             result.append(json);
 
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return result.toString();
     }
+
     /**
      * 获取VST5参数
-     * */
-    public   static String  getVST5Params(VST5ReqBean vst5ReqBean){
-        StringBuilder result=new StringBuilder();
+     */
+    public static String getVST5Params(VST5ReqBean vst5ReqBean) {
+        StringBuilder result = new StringBuilder();
 
         try {
 
             result.append("method=login&pushdata=");
             String json = new Gson().toJson(vst5ReqBean);
             result.append(json);
-
 
 
         } catch (Exception e) {

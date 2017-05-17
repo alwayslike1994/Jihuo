@@ -9,46 +9,38 @@ public class BaseBean {
     private String token;
     private String data;
 
-    public BaseBean(String code, String msg, String data)
-    {
+    public BaseBean(String code, String msg, String data) {
         this.code = code;
         this.token = msg;
         this.data = data;
     }
 
-    public String getCode()
-    {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(String code)
-    {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public String getToken()
-    {
+    public String getToken() {
         return token;
     }
 
-    public void setToken(String token)
-    {
+    public void setToken(String token) {
         this.token = token;
     }
 
-    public String getData()
-    {
+    public String getData() {
         return data;
     }
 
-    public void setData(String data)
-    {
+    public void setData(String data) {
         this.data = data;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "BaseBean{" +
                 "code='" + code + '\'' +
                 ", token='" + token + '\'' +

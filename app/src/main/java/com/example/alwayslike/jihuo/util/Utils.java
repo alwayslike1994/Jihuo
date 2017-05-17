@@ -13,9 +13,10 @@ import java.util.List;
  * Created by alwayslike on 2017/5/12.
  */
 
-public  class Utils {
+public class Utils {
 
     private static HashMap<Integer, String> serviceTypes = new HashMap();
+
     static {
         // Sample Services.
         serviceTypes.put(BluetoothGattService.SERVICE_TYPE_PRIMARY, "PRIMARY");
@@ -29,6 +30,7 @@ public  class Utils {
 
     // -------------------------------------------
     private static HashMap<Integer, String> charPermissions = new HashMap();
+
     static {
         charPermissions.put(0, "UNKNOW");
         charPermissions
@@ -61,6 +63,7 @@ public  class Utils {
 
     // -------------------------------------------
     private static HashMap<Integer, String> charProperties = new HashMap();
+
     static {
 
         charProperties.put(BluetoothGattCharacteristic.PROPERTY_BROADCAST,
@@ -86,6 +89,7 @@ public  class Utils {
 
     // --------------------------------------------------------------------------
     private static HashMap<Integer, String> descPermissions = new HashMap();
+
     static {
         descPermissions.put(0, "UNKNOW");
         descPermissions.put(BluetoothGattDescriptor.PERMISSION_READ, "READ");

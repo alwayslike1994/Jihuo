@@ -5,11 +5,11 @@ package com.example.alwayslike.jihuo.http;
  */
 
 public class ErrorResponseCodeException extends Exception {
-    public  ErrorResponseCodeException(){
+    public ErrorResponseCodeException() {
         super();
     }
-    public ErrorResponseCodeException(String message)
-    {
+
+    public ErrorResponseCodeException(String message) {
         super(message);
     }
 }

@@ -13,14 +13,14 @@ public class iBeacon {
     private final static String TAG = "iBeaconClass";
 
 
-        public String name;
-        public int major;
-        public int minor;
-        public String proximityUuid;
-        public String bluetoothAddress;
-        public int txPower;
-        public int rssi;
-        public boolean isIbeacon;
+    public String name;
+    public int major;
+    public int minor;
+    public String proximityUuid;
+    public String bluetoothAddress;
+    public int txPower;
+    public int rssi;
+    public boolean isIbeacon;
 
 
     public static iBeacon fromScanData(BluetoothDevice device, int rssi,

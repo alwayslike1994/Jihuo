@@ -59,8 +59,8 @@ public class ChooseActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK&&requestCode ==1234){
-            SharePreferenceHanler.writePreferences(Constant.Key.HAS_PHONE_CHECK,true);
+        if (resultCode == RESULT_OK && requestCode == 1234) {
+            SharePreferenceHanler.writePreferences(Constant.Key.HAS_PHONE_CHECK, true);
         }
     }
 }

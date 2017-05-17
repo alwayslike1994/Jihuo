@@ -6,8 +6,7 @@ import android.content.Context;
 import com.example.alwayslike.jihuo.util.Constant;
 import com.example.alwayslike.jihuo.util.SharePreferenceHanler;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,16 +16,18 @@ import java.util.List;
 public class Jihuo extends Application {
     public static Context mContext;
     public static final boolean DEBUG = true;
-    public static List<Byte> recBytes=new ArrayList<Byte>();
+    public static List<Byte> recBytes = new LinkedList<>();
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
         setparameter();
     }
+
     //为了解决签到过一次后每次重装APP就默认该用户已登录。
-    public  void setparameter(){
-        SharePreferenceHanler.writePreferences(Constant.Key.HAS_LOGIN_IN,false);
+    public void setparameter() {
+        SharePreferenceHanler.writePreferences(Constant.Key.HAS_LOGIN_IN, false);
     }
 
 

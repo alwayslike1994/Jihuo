@@ -236,6 +236,7 @@ public class TypeConvert {
         return sdf.format(new Date(current));
 
     }
+
     public static long strTime2Long(String time) {
 
         if (TextUtils.isEmpty(time))
