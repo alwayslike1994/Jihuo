@@ -13,15 +13,16 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.service.chooser.ChooserTargetService;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.alwayslike.jihuo.Jihuo;
 import com.example.alwayslike.jihuo.R;
 import com.example.alwayslike.jihuo.bean.iBeacon;
-import com.example.alwayslike.jihuo.servers.PhoneCheckServer;
 import com.example.alwayslike.jihuo.util.BluetoothLeClass;
+import com.example.alwayslike.jihuo.util.Constant;
+import com.example.alwayslike.jihuo.util.MessageHand;
+import com.example.alwayslike.jihuo.util.SharePreferenceHanler;
 
 import java.util.List;
 
@@ -40,10 +41,10 @@ public class ConnectToOBUAcitivity extends ListActivity {
     static private BluetoothLeClass mBLE;
     private boolean mScanning;
     private MyThread mythread = null;
-    private static final long SCAN_PERIOD = 60*60*24*1;  //最长扫描1天
+    private static final long SCAN_PERIOD = 60 * 60 * 24 * 1;  //最长扫描1天
 
 
-    public static  final int Connected=12345;
+    public static final int Connected = 12345;
     public static final int REFRESH = 0x000001;
     public static BluetoothGattCharacteristic target_character = null;
     public static BluetoothLeClass mBluetoothLeClass;
@@ -121,9 +122,9 @@ public class ConnectToOBUAcitivity extends ListActivity {
                         getActionBar().setTitle("正在拼命扫描设备中........");
                     }
                 }
-                if(msg.what==Connected){
-                    Intent intent=new Intent(ConnectToOBUAcitivity.this, ChooseActivity.class);
-                    startActivityForResult(intent,123);
+                if (msg.what == Connected) {
+                    Intent intent = new Intent(ConnectToOBUAcitivity.this, ChooseActivity.class);
+                    startActivityForResult(intent, 123);
                 }
                 super.handleMessage(msg);
             }
@@ -227,7 +228,6 @@ public class ConnectToOBUAcitivity extends ListActivity {
     }
 
 
-
     // 设备扫描回调
     private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
 
@@ -296,10 +296,17 @@ public class ConnectToOBUAcitivity extends ListActivity {
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            byte[] bytes=characteristic.getValue();
-            int Length=Jihuo.recBytes.size();
-            for(int i=0;i<bytes.length;i++){
-                Jihuo.recBytes.add(Length+i,new Byte(bytes[i]));
+            byte[] bytes = characteristic.getValue();
+            int Length = Jihuo.recBytes.size();
+            StringBuilder s = null;
+            Byte b = new MessageHand().byteToStr(s, bytes);
+            switch (b) {
+                case (byte) 0x02:
+                    SharePreferenceHanler.writePreferences(Constant.Key.VST5, s.toString());
+                    break;
+                case (byte) 0x12:
+                    break;
+
             }
 
         }
