@@ -5,9 +5,12 @@ package com.example.alwayslike.jihuo.bean;
  */
 
 public class VST5ReqBean {
+    private String method;
     private String VST5;
 
-    public VST5ReqBean(String VST5) {
+
+    public VST5ReqBean(String method, String VST5) {
+        this.method = method;
         this.VST5 = VST5;
     }
 

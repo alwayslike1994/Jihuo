@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.alwayslike.jihuo.R;
-import com.example.alwayslike.jihuo.bean.iBeacon;
+import com.example.alwayslike.jihuo.bean.iBeaconClass.iBeacon;
 
 import java.util.ArrayList;
 
@@ -81,12 +81,6 @@ public class LeDeviceListAdapter extends BaseAdapter {
                     .findViewById(R.id.device_address);
             viewHolder.deviceName = (TextView) view
                     .findViewById(R.id.device_name);
-            viewHolder.deviceUUID = (TextView) view
-                    .findViewById(R.id.device_beacon_uuid);
-            viewHolder.deviceMajor_Minor = (TextView) view
-                    .findViewById(R.id.device_major_minor);
-            viewHolder.devicetxPower_RSSI = (TextView) view
-                    .findViewById(R.id.device_txPower_rssi);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -99,22 +93,10 @@ public class LeDeviceListAdapter extends BaseAdapter {
         else
             viewHolder.deviceName.setText(R.string.unknown_device);
         if (device.isIbeacon) {
-            viewHolder.deviceName.append(" [iBeacon]");
+            viewHolder.deviceName.append(" [iBeaconClass]");
         }
 
         viewHolder.deviceAddress.setText(device.bluetoothAddress);
-        viewHolder.deviceUUID.setText(device.proximityUuid);
-        if (device.isIbeacon) {
-            viewHolder.deviceMajor_Minor.setText("major:" + device.major
-                    + ",minor:" + device.minor);
-            viewHolder.devicetxPower_RSSI.setText("txPower:" + device.txPower
-                    + ", rssi:" + device.rssi);
-        } else {
-            viewHolder.devicetxPower_RSSI.setText("rssi:" + device.rssi);
-        }
-
-        // view.setBackgroundColor(Color.argb(255-iAlpha,255-iRed, 0xFF-iGreen,
-        // 0xFF-iBlue));
         if (i % 2 == 0)// set color
         {
             view.setBackgroundColor(Color.argb(25, 255, 0, 0));
@@ -127,8 +109,5 @@ public class LeDeviceListAdapter extends BaseAdapter {
     class ViewHolder {
         TextView deviceName;
         TextView deviceAddress;
-        TextView deviceUUID;
-        TextView deviceMajor_Minor;
-        TextView devicetxPower_RSSI;
     }
 }

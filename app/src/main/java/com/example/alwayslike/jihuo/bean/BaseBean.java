@@ -5,46 +5,57 @@ package com.example.alwayslike.jihuo.bean;
  */
 
 public class BaseBean {
-    private String code;
-    private String token;
-    private String data;
+    private String Result;
+    private String Code;
+    private String Msg;
+    private String Data;
 
-    public BaseBean(String code, String msg, String data) {
-        this.code = code;
-        this.token = msg;
-        this.data = data;
+    public BaseBean(String result, String code, String msg, String data) {
+        this.Result = result;
+        this.Code = code;
+        this.Msg = msg;
+        this.Data = data;
+    }
+
+    public String getResult() {
+        return Result;
+    }
+
+    public void setResult(String result) {
+        this.Result = result;
     }
 
     public String getCode() {
-        return code;
+        return Code;
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.Code = code;
     }
 
-    public String getToken() {
-        return token;
+    public String getMsg() {
+        return Msg;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setMsg(String msg) {
+        this.Msg = msg;
     }
 
     public String getData() {
-        return data;
+        return Data;
     }
 
     public void setData(String data) {
-        this.data = data;
+        this.Data = data;
     }
 
     @Override
     public String toString() {
         return "BaseBean{" +
-                "code='" + code + '\'' +
-                ", token='" + token + '\'' +
-                ", data='" + data + '\'' +
+                "Result='" + Result + '\'' +
+                ", Code='" + Code + '\'' +
+                ", Msg='" + Msg + '\'' +
+                ", Data='" + Data + '\'' +
                 '}';
     }
 }

@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.alwayslike.jihuo.R;
-import com.example.alwayslike.jihuo.bean.BaseBean;
 import com.example.alwayslike.jihuo.bean.LoginReqBean;
 import com.example.alwayslike.jihuo.bean.LoginRspBean;
 import com.example.alwayslike.jihuo.http.HttpClient;
@@ -51,20 +50,20 @@ public class LoginActivity extends BaseActivity {
                 case 1:
                     BST5 = loginRspBean.getBST5();
                     SharePreferenceHanler.writePreferences(Constant.Key.BST5, BST5);
-                    SharePreferenceHanler.writePreferences(Constant.Key.phonenumber, phoneNumber);
-                    SharePreferenceHanler.writePreferences(Constant.Key.passwd, passWd);
-                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_LONG);
+                    SharePreferenceHanler.writePreferences(Constant.Key.USERNAME, phoneNumber);
+                    SharePreferenceHanler.writePreferences(Constant.Key.PASSWD, passWd);
+                    Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(LoginActivity.this, ConnectToOBUAcitivity.class);
                     startActivity(intent);
                     break;
                 case 0:
-                    Toast.makeText(LoginActivity.this, "手机号或密码错误", Toast.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, "手机号或密码错误", Toast.LENGTH_LONG).show();
                     break;
                 case 2:
-                    Toast.makeText(LoginActivity.this, "系统错误", Toast.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, "系统错误", Toast.LENGTH_LONG).show();
                     break;
                 case 3:
-                    Toast.makeText(LoginActivity.this, "获取网络参数错误", Toast.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, "获取网络参数错误", Toast.LENGTH_LONG).show();
                     break;
             }
         }
@@ -74,7 +73,7 @@ public class LoginActivity extends BaseActivity {
         phonenumber = (EditText) findViewById(R.id.login_workerid);
         passwd = (EditText) findViewById(R.id.login_password);
         loginBt = (Button) findViewById(R.id.login_btn);
-        String phonenumberStr = SharePreferenceHanler.readString(Constant.Key.phonenumber);
+        String phonenumberStr = SharePreferenceHanler.readString(Constant.Key.USERNAME);
         if (phonenumberStr != null) {
             phonenumber.setText(phonenumberStr);
             passwd.requestFocus();
@@ -109,14 +108,14 @@ public class LoginActivity extends BaseActivity {
      * 发送登录报文
      */
     private void loginToServer() {
-        final LoginReqBean loginReqBean = new LoginReqBean(phoneNumber, passWd);
+        final LoginReqBean loginReqBean = new LoginReqBean("login",phoneNumber, passWd);
 
         new HttpClient().sendRequest(ParamsHelper.getLoginParams(loginReqBean), new HttpClient.HttpListener() {
             @Override
             public void onSuccess(String response) {
                 try {
-                    BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
-                    loginRspBean = new Gson().fromJson(baseBean.getData(), LoginRspBean.class);
+
+                    loginRspBean = new Gson().fromJson(response, LoginRspBean.class);
 
                     if (loginRspBean != null) {
                         String status = loginRspBean.getStatus();

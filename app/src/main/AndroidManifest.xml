@@ -30,6 +30,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
@@ -47,6 +54,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.BaseActivity" />
+        <activity android:name=".ui.ChooseActivity" />
+        <activity android:name=".ui.ConnectToOBUAcitivity">
+
+
+        </activity>
+        <activity android:name=".ui.PhoneCheckActivity"/>
+
+        <receiver android:name=".receiver.AlarmReceiver"/>
+        <service android:name=".servers.HeartServer"/>
     </application>
+
+
 
 </manifest>

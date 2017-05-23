@@ -5,20 +5,26 @@ package com.example.alwayslike.jihuo.bean;
  */
 
 public class LoginReqBean {
-    private String phonenumber;
+    private String method;
+    private String username;
     private String passwd;
 
-    public LoginReqBean(String phonenumber, String passwd) {
-        this.phonenumber = phonenumber;
+    public LoginReqBean(String method, String username, String passwd) {
+        this.method = method;
+        this.username = username;
         this.passwd = passwd;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPasswd() {

@@ -16,7 +16,7 @@ import java.util.List;
 public class Jihuo extends Application {
     public static Context mContext;
     public static final boolean DEBUG = true;
-    public static List<Byte> recBytes = new LinkedList<>();
+    public static List<Byte> recBytes = new LinkedList<Byte>();
 
     @Override
     public void onCreate() {

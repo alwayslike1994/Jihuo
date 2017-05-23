@@ -6,11 +6,11 @@ package com.example.alwayslike.jihuo.bean;
 
 public class VST5RspBean {
     private String status;
-    private String Double;
+    private String activite;
 
-    public VST5RspBean(String status, String aDouble) {
+    public VST5RspBean(String status, String aActivite) {
         this.status = status;
-        Double = aDouble;
+        activite = aActivite;
     }
 
     public String getStatus() {
@@ -21,11 +21,11 @@ public class VST5RspBean {
         this.status = status;
     }
 
-    public String getDouble() {
-        return Double;
+    public String getActivite() {
+        return activite;
     }
 
-    public void setDouble(String aDouble) {
-        Double = aDouble;
+    public void setActivite(String activite) {
+        this.activite = activite;
     }
 }

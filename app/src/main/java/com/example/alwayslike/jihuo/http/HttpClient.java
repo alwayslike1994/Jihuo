@@ -51,11 +51,11 @@ public class HttpClient {
                         conn.setRequestProperty("Connection", "close");
                         conn.setRequestProperty("Accept-Encoding", "utf-8");
                         conn.setRequestProperty("Content-Type",
-                                "application/json");
+                                "application/x-www-form-urlencoded");
                         conn.setDoInput(true);
                         conn.setDoOutput(true);
-                        conn.setConnectTimeout(50 * 1000);
-                        conn.setReadTimeout(50 * 1000);
+                        conn.setConnectTimeout(10 * 1000);
+                        conn.setReadTimeout(60 * 1000);
                         conn.connect();
 
 
@@ -63,7 +63,7 @@ public class HttpClient {
                         writer.write(pushdata);
                         writer.flush();
 
-                        if (conn.getResponseCode() == 200) {
+//                        if (conn.getResponseCode() == 200) {
 
                             reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                             StringBuilder result = new StringBuilder();
@@ -84,15 +84,15 @@ public class HttpClient {
 
                             if (listener != null) {
                                 listener.onSuccess(resultStr);
-                            }
-
-                        } else {
-
-                            if (listener != null) {
-                                Log.i(TAG, "响应码：" + conn.getResponseCode());
-                                listener.onFail(new ErrorResponseCodeException("错误响应码：" + conn.getResponseCode()));
-                            }
-
+//                            }
+//
+//                        } else {
+//
+//                            if (listener != null) {
+//                                Log.i(TAG, "响应码：" + conn.getResponseCode());
+//                                listener.onFail(new ErrorResponseCodeException("错误响应码：" + conn.getResponseCode()));
+//                            }
+//
                         }
 
                     } catch (MalformedURLException e) {

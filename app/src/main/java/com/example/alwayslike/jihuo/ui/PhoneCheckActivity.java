@@ -1,15 +1,19 @@
 package com.example.alwayslike.jihuo.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alwayslike.jihuo.R;
-import com.example.alwayslike.jihuo.bean.BaseBean;
 import com.example.alwayslike.jihuo.bean.VST5ReqBean;
 import com.example.alwayslike.jihuo.bean.VST5RspBean;
 import com.example.alwayslike.jihuo.http.HttpClient;
@@ -19,36 +23,47 @@ import com.example.alwayslike.jihuo.util.MessageHand;
 import com.example.alwayslike.jihuo.util.SharePreferenceHanler;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.alwayslike.jihuo.util.Constant.Key.BST5;
-import static com.example.alwayslike.jihuo.util.Constant.Key.VST5;
-
 /**
  * Created by alwayslike on 2017/5/16.
  */
 
 public class PhoneCheckActivity extends BaseActivity {
-    static int Totol_Send_bytes = 0;
+
     private TextView textView;
     static String SendString = "0123";
-    private List<Integer> integers = new ArrayList<>();
-    private List<Byte> sendBytes = new ArrayList<>();
+    private VST5RspBean vst5RspBean;
+    private String TAG = "VST5";
+    private String str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phonecheck);
         initView();
+
         sendDataToOBU();
-        String vst5 = SharePreferenceHanler.readString(Constant.Key.VST5);
-        if (vst5 == null) {
-        } else {
-            sendDataToServer();
-        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("ACTION_GETBYTES_BROADCAST");
+        registerReceiver(receiver, intentFilter);
 
     }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action .equals("ACTION_GETBYTES_BROADCAST") ) {
+
+                str = intent.getStringExtra("VST5");
+                Log.i(TAG, str);
+                sendDataToServer();
+
+            } else {
+                mhandler.sendEmptyMessage(2);
+            }
+        }
+
+    };
 
     public Handler mhandler = new Handler() {
         @Override
@@ -56,26 +71,37 @@ public class PhoneCheckActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    SharePreferenceHanler.writePreferences(Constant.Key.VST5, null);
-                    Toast.makeText(PhoneCheckActivity.this, "手机认证成功", Toast.LENGTH_LONG);
+                    SharePreferenceHanler.writePreferences(Constant.Key.ACTIVATE, vst5RspBean.getActivite());
+                    Toast.makeText(PhoneCheckActivity.this, "手机认证成功", Toast.LENGTH_LONG).show();
                     textView.setText("手机认证成功");
-                    PhoneCheckActivity.this.setResult(RESULT_OK);
-                    PhoneCheckActivity.this.finish();
+                    setResult(RESULT_OK);
+                    finish();
                     break;
                 case 0:
-                    Toast.makeText(PhoneCheckActivity.this, "手机认证失败", Toast.LENGTH_LONG);
+                    Toast.makeText(PhoneCheckActivity.this, "手机认证失败", Toast.LENGTH_LONG).show();
 
                     break;
                 case 2:
-                    Toast.makeText(PhoneCheckActivity.this, "系统错误", Toast.LENGTH_LONG);
+                    Toast.makeText(PhoneCheckActivity.this, "系统错误", Toast.LENGTH_LONG).show();
                     break;
                 case 3:
-                    Toast.makeText(PhoneCheckActivity.this, "获取参数错误", Toast.LENGTH_LONG);
+                    Toast.makeText(PhoneCheckActivity.this, "获取参数错误", Toast.LENGTH_LONG).show();
 
                     break;
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            unregisterReceiver(receiver);
+        } catch (Exception e) {
+            mhandler.sendEmptyMessage(2);
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,53 +122,34 @@ public class PhoneCheckActivity extends BaseActivity {
 
     public void initView() {
 
-        textView = (TextView) findViewById(R.id.phonecheck);
+        textView = (TextView) findViewById(R.id.phone_check_status);
         textView.setText("正在进行手机认证");
     }
 
-    private void Send_Bytes(byte bytes[]) {
-        // 分包发送 每包最大18个字节
-        int total_len = bytes.length;
-        int cur_pos = 0;
-        int i = 0;
-        while (cur_pos < total_len) {
-            int lenSub = 0;
-            if (total_len - cur_pos > 18)
-                lenSub = 18;
-            else
-                lenSub = total_len - cur_pos;
+    @Override
+    public void onBackPressed() {
 
-            byte[] bytes_sub = new byte[lenSub];
-
-            for (i = 0; i < lenSub; i++) {
-                bytes_sub[i] = bytes[cur_pos + i];
-            }
-            cur_pos += lenSub;
-            ConnectToOBUAcitivity.writeChar6_in_bytes(bytes_sub);
-
-            // 延时 一会
-            try {
-                Thread.sleep(40);
-            } catch (InterruptedException e) {
-                // TODO 自动生成的 catch 块
-                e.printStackTrace();
-            }
-        }
+        unregisterReceiver(receiver);
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
+
     public void sendDataToOBU() {
-        byte[] bytes = new MessageHand().strToBytes(BST5, (byte) 0x01);
-        Send_Bytes(bytes);
+        byte[] bytes = new MessageHand().strToBytes(SharePreferenceHanler.readString(Constant.Key.BST5), (byte) 0x01);
+        ConnectToOBUAcitivity.Send_Bytes(bytes);
     }
 
 
     public void sendDataToServer() {
-        final VST5ReqBean vst5ReqBean = new VST5ReqBean(VST5);
+
+
+        final VST5ReqBean vst5ReqBean = new VST5ReqBean("verify", str);
         new HttpClient().sendRequest(ParamsHelper.getVST5Params(vst5ReqBean), new HttpClient.HttpListener() {
             @Override
             public void onSuccess(String response) {
-                BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
-                VST5RspBean vst5RspBean = new Gson().fromJson(baseBean.getData(), VST5RspBean.class);
+
+                vst5RspBean = new Gson().fromJson(response, VST5RspBean.class);
                 if (vst5RspBean.getStatus() == "1") {
                     mhandler.sendEmptyMessage(1);
                 } else {

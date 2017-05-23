@@ -23,4 +23,12 @@ public class LoginRspBean {
     public void setBST5(String BST5) {
         this.BST5 = BST5;
     }
+
+    @Override
+    public String toString() {
+        return "LoginRspBean{" +
+                "status='" + status + '\'' +
+                ", BST5='" + BST5 + '\'' +
+                '}';
+    }
 }

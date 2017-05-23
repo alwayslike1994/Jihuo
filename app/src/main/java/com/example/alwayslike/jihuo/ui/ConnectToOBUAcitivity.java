@@ -14,11 +14,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.alwayslike.jihuo.Jihuo;
 import com.example.alwayslike.jihuo.R;
-import com.example.alwayslike.jihuo.bean.iBeacon;
+import com.example.alwayslike.jihuo.bean.iBeaconClass;
+import com.example.alwayslike.jihuo.bean.iBeaconClass.iBeacon;
+import com.example.alwayslike.jihuo.servers.HeartServer;
 import com.example.alwayslike.jihuo.util.BluetoothLeClass;
 import com.example.alwayslike.jihuo.util.Constant;
 import com.example.alwayslike.jihuo.util.MessageHand;
@@ -42,7 +47,7 @@ public class ConnectToOBUAcitivity extends ListActivity {
     private boolean mScanning;
     private MyThread mythread = null;
     private static final long SCAN_PERIOD = 60 * 60 * 24 * 1;  //最长扫描1天
-
+    public String bluetoothAddress;
 
     public static final int Connected = 12345;
     public static final int REFRESH = 0x000001;
@@ -57,7 +62,9 @@ public class ConnectToOBUAcitivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().setTitle("正在扫描设备中...");
+
+
+//        getActionBar().setTitle("正在拼命扫描设备中");
         if (!getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT)
@@ -103,26 +110,10 @@ public class ConnectToOBUAcitivity extends ListActivity {
             public void handleMessage(Message msg) {
                 if (msg.what == REFRESH) {
                     count++;
-                    if (count == 0)
-                        getActionBar().setTitle("正在拼命扫描设备中.");
-                    else if (count == 1)
-                        getActionBar().setTitle("正在拼命扫描设备中..");
-                    else if (count == 2)
-                        getActionBar().setTitle("正在拼命扫描设备中...");
-                    else if (count == 3)
-                        getActionBar().setTitle("正在拼命扫描设备中....");
-                    else if (count == 4)
-                        getActionBar().setTitle("正在拼命扫描设备中.....");
-                    else if (count == 5)
-                        getActionBar().setTitle("正在拼命扫描设备中......");
-                    else if (count == 6)
-                        getActionBar().setTitle("正在拼命扫描设备中.......");
-                    else {
-                        count = 0;
-                        getActionBar().setTitle("正在拼命扫描设备中........");
-                    }
                 }
                 if (msg.what == Connected) {
+                    SharePreferenceHanler.writePreferences(Constant.Key.VST5, "1");
+                    startService(new Intent(ConnectToOBUAcitivity.this, HeartServer.class));
                     Intent intent = new Intent(ConnectToOBUAcitivity.this, ChooseActivity.class);
                     startActivityForResult(intent, 123);
                 }
@@ -133,14 +124,66 @@ public class ConnectToOBUAcitivity extends ListActivity {
         new MyThread().start();
     }
 
+    public static void Send_Bytes(byte bytes[]) {
+        // 分包发送 每包最大18个字节
+        int total_len = bytes.length;
+        int cur_pos = 0;
+        int i = 0;
+        while (cur_pos < total_len) {
+            int lenSub = 0;
+            if (total_len - cur_pos > 18)
+                lenSub = 18;
+            else
+                lenSub = total_len - cur_pos;
+
+            byte[] bytes_sub = new byte[lenSub];
+
+            for (i = 0; i < lenSub; i++) {
+                bytes_sub[i] = bytes[cur_pos + i];
+            }
+            cur_pos += lenSub;
+            ConnectToOBUAcitivity.writeChar6_in_bytes(bytes_sub);
+
+            // 延时 一会
+            try {
+                Thread.sleep(40);
+            } catch (InterruptedException e) {
+                // TODO 自动生成的 catch 块
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        final iBeacon device = mLeDeviceListAdapter.getDevice(position);
+        if (device == null)
+            return;
+
+        if (mScanning) {
+            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mScanning = false;
+        }
+
+        Log.i(TAG, "mBluetoothAdapter.enable");
+        bluetoothAddress = device.bluetoothAddress;
+        boolean bRet = mBLE.connect(device.bluetoothAddress);
+
+        Log.i(TAG, "connect bRet = " + bRet);
+
+        Toast toast = Toast.makeText(getApplicationContext(), "正在连接设备并获取服务中",
+                Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
 
     public class MyThread extends Thread {
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
 
                 Message msg = new Message();
-                msg.what = REFRESH;
-                mHandler.sendMessage(msg);
+//                msg.what = REFRESH;
+//                mHandler.sendMessage(msg);
                 try {
                     Thread.sleep(200);//线程暂停0.2秒
                 } catch (InterruptedException e) {
@@ -152,7 +195,6 @@ public class ConnectToOBUAcitivity extends ListActivity {
 
     // 字节发送
     static public void writeChar6_in_bytes(byte bytes[]) {
-        // byte[] writeValue = new byte[1];
 
         if (gattCharacteristic_char6 != null) {
             boolean bRet = gattCharacteristic_char6.setValue(bytes);
@@ -172,7 +214,7 @@ public class ConnectToOBUAcitivity extends ListActivity {
     protected void onResume() {
         Log.i(TAG, "---> onResume");
         super.onResume();
-        mBLE.close();
+//        mBLE.close();
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter(this);
         setListAdapter(mLeDeviceListAdapter);
@@ -200,6 +242,8 @@ public class ConnectToOBUAcitivity extends ListActivity {
     protected void onDestroy() {
         Log.i(TAG, "---> onDestroy");
         super.onDestroy();
+
+
         Log.e(TAG, "start onDestroy~~~");
         scanLeDevice(false);
         mBLE.disconnect();
@@ -235,12 +279,13 @@ public class ConnectToOBUAcitivity extends ListActivity {
         public void onLeScan(final BluetoothDevice device, int rssi,
                              byte[] scanRecord) {
 
-            final iBeacon ibeacon = iBeacon.fromScanData(device, rssi,
+            final iBeacon ibeacon = iBeaconClass.fromScanData(device, rssi,
                     scanRecord);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mLeDeviceListAdapter.addDevice(ibeacon);
+
                     mLeDeviceListAdapter.notifyDataSetChanged();
                 }
             });
@@ -263,7 +308,7 @@ public class ConnectToOBUAcitivity extends ListActivity {
     private void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null)
             return;
-        BluetoothGattCharacteristic Characteristic_cur = null;
+
 
         for (BluetoothGattService gattService : gattServices) {
 
@@ -274,7 +319,6 @@ public class ConnectToOBUAcitivity extends ListActivity {
                 if (gattCharacteristic.getUuid().toString().equals(UUID_CHAR6)) {
                     // 把char1 保存起来�?以方便后面读写数据时使用
                     gattCharacteristic_char6 = gattCharacteristic;
-                    Characteristic_cur = gattCharacteristic;
                     mBLE.setCharacteristicNotification(gattCharacteristic, true);
                     Log.i(TAG, "+++++++++UUID_CHAR6");
                 }
@@ -298,13 +342,14 @@ public class ConnectToOBUAcitivity extends ListActivity {
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             byte[] bytes = characteristic.getValue();
             int Length = Jihuo.recBytes.size();
-            StringBuilder s = null;
+            StringBuilder s = new StringBuilder();
             Byte b = new MessageHand().byteToStr(s, bytes);
             switch (b) {
                 case (byte) 0x02:
                     SharePreferenceHanler.writePreferences(Constant.Key.VST5, s.toString());
                     break;
-                case (byte) 0x12:
+                case (byte) 0x32:
+                    SharePreferenceHanler.writePreferences(Constant.Key.TC_response,s.toString());
                     break;
 
             }

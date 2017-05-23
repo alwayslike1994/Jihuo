@@ -37,7 +37,7 @@ public class LogUtil {
 
         boolean hasSDCard = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
 
-        String user_id = SharePreferenceHanler.readString(Constant.Key.phonenumber);
+        String user_id = SharePreferenceHanler.readString(Constant.Key.USERNAME);
 
         String PATH = Environment.getExternalStorageDirectory()
                 .toString() + File.separator + "ParkApp" + File.separator + "Log";
